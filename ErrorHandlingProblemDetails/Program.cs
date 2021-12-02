@@ -1,5 +1,7 @@
 using ErrorHandlingProblemDetails.Data;
 using ErrorHandlingProblemDetails.Infrastructure;
+using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -20,6 +22,18 @@ try
     {
         options.UseInMemoryDatabase(("test-db"));
     });
+    builder.Services.AddProblemDetails(options =>
+    {
+        options.IncludeExceptionDetails = (context, exception) => builder.Environment.IsDevelopment();
+        options.Map<ProductCustomException>(exception=> new ProblemDetails
+        {
+            Title = exception.Title,
+            Detail = exception.Detail,
+            Status = StatusCodes.Status500InternalServerError,
+            Type = exception.Type,
+            Instance = exception.Instance
+        });
+    });
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,7 +48,7 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-
+    app.UseProblemDetails();
     app.UseHttpsRedirection();
 
     app.UseAuthorization();
