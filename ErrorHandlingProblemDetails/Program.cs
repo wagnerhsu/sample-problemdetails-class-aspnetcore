@@ -18,14 +18,11 @@ try
     var builder = WebApplication.CreateBuilder(args);
     builder.Host.UseSerilog();
     // Add services to the container.
-    builder.Services.AddDbContext<AppDbContext>(options =>
-    {
-        options.UseInMemoryDatabase(("test-db"));
-    });
+    builder.Services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("test-db"); });
     builder.Services.AddProblemDetails(options =>
     {
         options.IncludeExceptionDetails = (context, exception) => builder.Environment.IsDevelopment();
-        options.Map<ProductCustomException>(exception=> new ProblemDetails
+        options.Map<ProductCustomException>(exception => new ProblemDetails
         {
             Title = exception.Title,
             Detail = exception.Detail,
@@ -43,11 +40,8 @@ try
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.UseProblemDetails();
     app.UseHttpsRedirection();
 
