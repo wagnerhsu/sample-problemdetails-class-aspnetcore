@@ -28,10 +28,11 @@ namespace ErrorHandlingProblemDetails
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddProblemDetails(options=>options.IncludeExceptionDetails =((ctx,env)=> true));
             services.AddProblemDetails(setup =>
             {
                 setup.IncludeExceptionDetails = (ctx, env) => CurrentEnvironment.IsDevelopment() || CurrentEnvironment.IsStaging();
-
+            
                 setup.Map<ProductCustomException>(exception => new ProductCustomDetails
                 {
                     Title = exception.Title,
