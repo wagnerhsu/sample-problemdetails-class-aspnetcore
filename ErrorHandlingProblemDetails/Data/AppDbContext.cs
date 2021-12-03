@@ -5,7 +5,8 @@ namespace ErrorHandlingProblemDetails.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
-
+    public DbSet<Company> Companies { get; set; }     
+    public DbSet<Employee> Employees { get; set; } 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
@@ -26,5 +27,8 @@ public class AppDbContext : DbContext
             new Product {ProductId = 102, Name = "Blanket", Category = "Accessories"},
             new Product {ProductId = 103, Name = "Bicycle", Category = "Vehicle"}
         );
+
+        builder.ApplyConfiguration(new CompanyConfiguration());
+        builder.ApplyConfiguration(new EmployeeConfiguration());
     }
 }

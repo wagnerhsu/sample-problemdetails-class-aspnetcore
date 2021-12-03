@@ -1,4 +1,7 @@
-﻿## 2021-12-02
+﻿## 2021-12-03
+- Can persist to sqlserver
+
+## 2021-12-02
 
 - Create this file based on .NET 6.0
 - Add Serilog support

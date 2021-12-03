@@ -146,6 +146,92 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GetAllCompanies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7299/api/companies",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7299",
+					"path": [
+						"api",
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCompanyById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7299/api/companies/3d490a70-94ce-4d15-9494-5248280c2ce3",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7299",
+					"path": [
+						"api",
+						"companies",
+						"3d490a70-94ce-4d15-9494-5248280c2ce3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEmployeesByCompanyId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7299/api/Companies/3d490a70-94ce-4d15-9494-5248280c2ce3/employees",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7299",
+					"path": [
+						"api",
+						"Companies",
+						"3d490a70-94ce-4d15-9494-5248280c2ce3",
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEmployeeByCompanyIdAndEmployeeId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7299/api/Companies/c9d4c053-49b6-410c-bc78-2d54a9991870/employees/86dba8c0-d178-41e7-938c-ed49778fb52a",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7299",
+					"path": [
+						"api",
+						"Companies",
+						"c9d4c053-49b6-410c-bc78-2d54a9991870",
+						"employees",
+						"86dba8c0-d178-41e7-938c-ed49778fb52a"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
