@@ -27,10 +27,10 @@ public class CompaniesController : ControllerBase
         return Ok(companiesDto);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "CompanyById")]
     public IActionResult GetCompany(Guid id)
     {
-        var company = _repositoryManager.Company.GetCompany(id, trackChanges: false);
+        var company = _repositoryManager.Company.GetCompany(id, false);
         if (company == null)
         {
             _logger.LogInformation($"Company with id: {id} doesn't exist in the database.");
@@ -41,5 +41,57 @@ public class CompaniesController : ControllerBase
             var companyDto = _mapper.Map<CompanyDto>(company);
             return Ok(companyDto);
         }
+    }
+
+    [HttpPost]
+    public IActionResult CreateCompany([FromBody] CreateCompanyDto company)
+    {
+        if (company == null)
+        {
+            _logger.LogError("CompanyForCreationDto object sent from client is null.");
+            return BadRequest("CompanyForCreationDto object is null");
+        }
+
+        var companyEntity = _mapper.Map<Company>(company);
+        _repositoryManager.Company.CreateCompany(companyEntity);
+        _repositoryManager.Save();
+        var companyToReturn = _mapper.Map<CompanyDto>(companyEntity);
+        return CreatedAtRoute("CompanyById", new {id = companyToReturn.CompanyId}, companyToReturn);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCompany(Guid id)
+    {
+        var company = _repositoryManager.Company.GetCompany(id, false);
+        if (company == null)
+        {
+            _logger.LogInformation($"Company with id: {id} doesn't exist in the database.");
+            return NotFound();
+        }
+
+        _repositoryManager.Company.DeleteCompany(company);
+        _repositoryManager.Save();
+        return NoContent();
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult UpdateCompany(Guid id, [FromBody] UpdateCompanyDto company)
+    {
+        if (company == null)
+        {
+            _logger.LogError("CompanyForUpdateDto object sent from client is null.");
+            return BadRequest("CompanyForUpdateDto object is null");
+        }
+
+        var companyEntity = _repositoryManager.Company.GetCompany(id, trackChanges: true);
+        if (companyEntity == null)
+        {
+            _logger.LogInformation($"Company with id: {id} doesn't exist in the database.");
+            return NotFound();
+        }
+
+        _mapper.Map(company, companyEntity);
+        _repositoryManager.Save();
+        return NoContent();
     }
 }

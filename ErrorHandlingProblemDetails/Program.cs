@@ -17,11 +17,18 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
     builder.Host.UseSerilog();
+    var useInMemoryDb = builder.Configuration.GetValue<bool>("UseInMemeryDb");
     // Add services to the container.
     builder.Services.AddDbContext<AppDbContext>(options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-        //options.UseInMemoryDatabase("test-db");
+        if (useInMemoryDb)
+            options.UseInMemoryDatabase("test-db");
+        else options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+        if (builder.Environment.IsDevelopment())
+        {
+            options.EnableDetailedErrors();
+            options.EnableSensitiveDataLogging();
+        }
     });
     builder.Services.AddProblemDetails(options =>
     {

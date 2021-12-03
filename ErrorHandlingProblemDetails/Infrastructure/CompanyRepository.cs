@@ -15,4 +15,14 @@ public class CompanyRepository: RepositoryBase<Company>,ICompanyRepository
     {
         return FindByCondition(c => c.CompanyId.Equals(companyId), trackChanges).SingleOrDefault();
     }
+
+    public void CreateCompany(Company company)
+    {
+        Create(company);
+    }
+
+    public void DeleteCompany(Company company)
+    {
+        Delete(company);
+    }
 }
