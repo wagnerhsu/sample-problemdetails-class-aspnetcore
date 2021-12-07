@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ErrorHandlingProblemDetails.Data;
+using ErrorHandlingProblemDetails.Filters;
 using ErrorHandlingProblemDetails.Infrastructure;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,7 @@ try
     });
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+    builder.Services.AddScoped<ValidateCompanyExistAttribute>();
     // builder.Services.AddControllers()
     //     .AddNewtonsoftJson();
     builder.Services.AddControllers()

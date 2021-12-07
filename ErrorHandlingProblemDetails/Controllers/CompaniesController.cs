@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ErrorHandlingProblemDetails.Filters;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorHandlingProblemDetails.Controllers;
@@ -59,23 +60,20 @@ public class CompaniesController : ControllerBase
         return CreatedAtRoute("CompanyById", new {id = companyToReturn.CompanyId}, companyToReturn);
     }
 
+    [ServiceFilter(typeof(ValidateCompanyExistAttribute))]
     [HttpDelete("{id}")]
-    public IActionResult DeleteCompany(Guid id)
+    public async Task<IActionResult> DeleteCompany(Guid id)
     {
-        var company = _repositoryManager.Company.GetCompany(id, false);
-        if (company == null)
-        {
-            _logger.LogInformation($"Company with id: {id} doesn't exist in the database.");
-            return NotFound();
-        }
+        var company = HttpContext.Items["company"] as Company;
 
         _repositoryManager.Company.DeleteCompany(company);
-        _repositoryManager.Save();
+        await _repositoryManager.SaveAsync();
         return NoContent();
     }
 
+    [ServiceFilter(typeof(ValidateCompanyExistAttribute))]
     [HttpPut("{id}")]
-    public IActionResult UpdateCompany(Guid id, [FromBody] UpdateCompanyDto company)
+    public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] UpdateCompanyDto company)
     {
         if (company == null)
         {
@@ -83,15 +81,10 @@ public class CompaniesController : ControllerBase
             return BadRequest("CompanyForUpdateDto object is null");
         }
 
-        var companyEntity = _repositoryManager.Company.GetCompany(id, trackChanges: true);
-        if (companyEntity == null)
-        {
-            _logger.LogInformation($"Company with id: {id} doesn't exist in the database.");
-            return NotFound();
-        }
+        var companyEntity = HttpContext.Items["company"] as Company;
 
         _mapper.Map(company, companyEntity);
-        _repositoryManager.Save();
+        await _repositoryManager.SaveAsync();
         return NoContent();
     }
 }
