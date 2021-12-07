@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ErrorHandlingProblemDetails.Data;
 using ErrorHandlingProblemDetails.Infrastructure;
 using Hellang.Middleware.ProblemDetails;
@@ -44,7 +46,10 @@ try
     });
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
-    builder.Services.AddControllers();
+    // builder.Services.AddControllers()
+    //     .AddNewtonsoftJson();
+    builder.Services.AddControllers()
+        .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter()));
     builder.Services.AddAutoMapper(typeof(Program));
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -78,3 +83,4 @@ finally
 {
     Log.CloseAndFlush();
 }
+
