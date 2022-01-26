@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ErrorHandlingProblemDetails.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace ErrorHandlingProblemDetails.Data;
+namespace Ehpd.EFCore;
 
 public class AppDbContext : DbContext
 {
@@ -15,7 +16,6 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<Product>().ToTable("Products");
         builder.Entity<Product>().HasKey(p => p.ProductId);
         builder.Entity<Product>().Property(p => p.ProductId).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Product>().Property(p => p.Name).IsRequired().HasMaxLength(50);
